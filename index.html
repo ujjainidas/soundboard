@@ -33,9 +33,10 @@
     </ul>
 
     <script>
-      let firstKey = false;
-
       let speakTimeout;
+      let isSpeakingInstructions = false;
+      let firstButton = -1;
+
       function speak(text, delay = 150) {
           if (!window.speechSynthesis) return;
           window.speechSynthesis.cancel();
@@ -46,22 +47,36 @@
               utterance.rate = 1.3;
               utterance.pitch = 1;
               utterance.volume = 1;
+
+              utterance.onend = () => {
+                  isSpeakingInstructions = false;
+              };
+
+              isSpeakingInstructions = true;
               window.speechSynthesis.speak(utterance);
           }, delay);
       }
 
       window.addEventListener('keydown', function(event) {
-        if(!firstKey) {
-          speak("Use W A S D keys to move between sounds. Press P to play a sound. Use H to save or unsave a sound. Use up or down arrow keys to change speed of sound. Use left arrow key to reset speed of sound. Use spacebar to close these instructions.");
-          firstKey = true;
-          return;
-        }
         const key = event.key;
-        if (key == "Enter") {
-          speak("Use W A S D keys to move between sounds. Press P to play a sound. Use H to save or unsave a sound. Use up or down arrow keys to change speed of sound. Use left arrow key to reset speed of sound. Use spacebar to close these instructions.");
-        } else if (key == ' ') {
-          event.preventDefault();
-          window.location.href = 'soundboard.html';
+        if(firstButton == -1) {
+            speak("Instructions. Press Enter for Voice Over");
+            firstButton = 0;
+            return;
+        } else if (key === "Enter") {
+            if (isSpeakingInstructions) {
+                window.speechSynthesis.cancel();
+                isSpeakingInstructions = false;
+            } else {
+                speak("Use space bar to close or open these instructions. Use W A S D keys to move between sounds. Press P to play a sound. Use H to save or unsave a sound. Use up or down arrow keys to change speed of sound. Use left arrow key to reset speed of sound. Use space bar to close or open these instructions.");
+            }
+        } else if (key === ' ') {
+            if (isSpeakingInstructions) {
+                  window.speechSynthesis.cancel();
+                  isSpeakingInstructions = false;
+            }
+            event.preventDefault();
+            window.location.href = 'soundboard.html';
         }
       });
     </script>
