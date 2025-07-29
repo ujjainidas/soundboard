@@ -52,13 +52,13 @@
 
       window.addEventListener('keydown', function(event) {
         if(!firstKey) {
-          speak("Use W A S D keys to move between sounds. Press P to play a sound. Use H to save or unsave a sound. Use up or down arrow keys to change speed of sound. Use left arrow key to reset speed of sound.");
+          speak("Use W A S D keys to move between sounds. Press P to play a sound. Use H to save or unsave a sound. Use up or down arrow keys to change speed of sound. Use left arrow key to reset speed of sound. Use spacebar to close these instructions.");
           firstKey = true;
           return;
         }
         const key = event.key;
         if (key == "Enter") {
-          speak("Use W A S D keys to move between sounds. Press P to play a sound. Use H to save or unsave a sound. Use up or down arrow keys to change speed of sound. Use left arrow key to reset speed of sound.");
+          speak("Use W A S D keys to move between sounds. Press P to play a sound. Use H to save or unsave a sound. Use up or down arrow keys to change speed of sound. Use left arrow key to reset speed of sound. Use spacebar to close these instructions.");
         } else if (key == ' ') {
           event.preventDefault();
           window.location.href = 'soundboard.html';
