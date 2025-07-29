@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soundboard</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 10px; 
+        }
+
+        .soundboard { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 20px;  
+        }
+
+        .other { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 20px; margin-bottom: 20px; 
+        }
+
+        button { 
+            position: relative;
+            padding: 15px; 
+            font-size: 15px; 
+            overflow: hidden;
+        }
+
+        button.active {
+            background-color: #ff00d9;
+            color: black;
+            border: 2px solid #ff00d9;
+        }
+
+        button.selected {
+            background-color: #61a6d7;
+            color: black;
+            border: 2px solid #61a6d7;
+        }
+
+        button.selected:not(.active) {
+            background-color: #61a6d7;
+            color: black;
+            border: 2px solid #61a6d7;
+        }
+
+        button.active:not(.selected) {
+            background-color: #ff00d9;
+            color: black;
+            border: 2px solid #ff00d9;
+        }
+
+        button.active.selected {
+            background-color: #61a6d7;
+            color: black;
+            border: 2px solid #ff00d9;
+        }
+
+        .trash-icon {
+            display: none;
+            position: absolute;
+            bottom: 3px;
+            left: 3px;
+            font-size: 0.9em;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        button.selected .trash-icon {
+            display: inline;
+        }
+
+
+        .control-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+        }
+
+        .control-bar label {
+            margin-right: 10px;
+        }
+
+        .control-bar button {
+            font-size: 15px;
+            padding: 10px;
+        }
+
+        .control-bar input[type="range"] {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fluid Music</h1>
+    <div class="soundboard">
+        <button id="soft-piano" aria-label="Piano" onclick="handleClick('soft-piano')">Piano</button>
+        <button id="harp" aria-label="Harp" onclick="handleClick('harp')">Harp</button>
+        <button id="ascending-harp" aria-label="Ascending Harp" onclick="handleClick('ascending-harp')">Ascending Harp</button>
+        <button id="descending-harp" aria-label="Descending Harp" onclick="handleClick('descending-harp')">Descending Harp</button>
+        <button id="strings" aria-label="Vibrato" onclick="handleClick('strings')">Vibrato</button>
+        <!-- <button id="pluck" aria-label="Strum" onclick="handleClick('pluck')">Strum</button> -->
+    </div>
+
+    <h1>Natural Sounds</h1>
+    <div class="soundboard">
+        <!-- <button id="breath" aria-label="Breath" onclick="handleClick('breath')">Breath</button> -->
+        <button id="drip" aria-label="drip" onclick="handleClick('drip')">Drip</button>
+        <button id="ocean-wave" aria-label="Wave" onclick="handleClick('ocean-wave')">Wave</button>
+        <!-- <button id="wind" aria-label="Wind" onclick="handleClick('wind')">Wind</button> -->
+        <!-- <button id="breeze" aria-label="Breeze" onclick="handleClick('breeze')">Breeze</button> -->
+        <!-- <button id="foot-asphalt" aria-label="Asphalt Step" onclick="handleClick('foot-asphalt')">Asphalt Step</button> -->
+        <button id="footstep-puddle" aria-label="Mud Step" onclick="handleClick('footstep-puddle')">Mud Step</button>
+        <button id="twig-snap" aria-label="Twig Snap" onclick="handleClick('twig-snap')">Twig Snap</button>
+        <!-- <button id="clap" aria-label="Clap" onclick="handleClick('clap')">Clap</button> -->
+        <button id="pan" aria-label="Wind pan" onclick="handleClick('pan')">Wind Pan</button>
+
+    </div>
+
+    <h1>Non-fluid Music</h1>
+    <div class="soundboard">
+        <!-- <button id="bass-drum1" aria-label="Bass Drum 1" onclick="handleClick('bass-drum1')">Bass Drum 1</button>
+        <button id="bass-drum2" aria-label="Bass Drum 2" onclick="handleClick('bass-drum2')">Bass Drum 2</button> -->
+        <button id="drumset" aria-label="Drum" onclick="handleClick('drumset')">Drum</button>
+        <button id="bell" aria-label="Bell" onclick="handleClick('bell')">Bell</button>
+        <button id="short-piano" aria-label="Firm Piano" onclick="handleClick('short-piano')">Firm Piano</button>
+        <!-- <button id="jazz-piano" aria-label="Jazz Piano" onclick="handleClick('jazz-piano')">Jazz Piano</button> -->
+        <button id="staccato" aria-label="Staccato" onclick="handleClick('staccato')">Staccato</button>
+        <button id="pizzicato" aria-label="Pizzicato" onclick="handleClick('pizzicato')">Pizzicato</button>
+        <!-- <button id="guitar" aria-label="Firm Strum" onclick="handleClick('guitar')">Firm Strum</button> -->
+    </div>
+
+    <h1>Synthetic Sounds</h1>
+    <div class="soundboard">
+        <!-- <button id="sine" aria-label="Sine tone" onclick="handleClick('sine')">Sine Tone</button> -->
+        <button id="rising-pitch" aria-label="Rising Pitch 1" onclick="handleClick('rising-pitch')">Rising Pitch 1</button>
+        <button id="soft-bells" aria-label="Rising Pitch 2" onclick="handleClick('soft-bells')">Rising Pitch 2</button>
+        <button id="falling" aria-label="Falling Pitch" onclick="handleClick('falling')">Falling Pitch</button>
+        <!-- <button id="beat" aria-label="Pulse" onclick="handleClick('beat')">Pulse</button> -->
+        <button id="pan-cue" aria-label="Spatial Pulse" onclick="handleClick('pan-cue')">Spatial Pulse</button>
+        <button id="low-beat" aria-label="Robotic Beat" onclick="handleClick('low-beat')">Robotic Beat</button>
+        <!-- <button id="metal" aria-label="Metal hit" onclick="handleClick('metal')">Metal Hit</button> -->
+        <!-- <button id="stereo-bounce" aria-label="Stereo bounce" onclick="handleClick('stereo-bounce')">Stereo Bounce</button> -->
+    </div>
+
+    <!-- <h1>Other</h1>
+    <div class="other">
+        <button id="resetAll" aria-label="Reset All">Reset All</button>
+        <button id="instructions" aria-label="Instructions" onclick='window.location.href = "instructions.html"'>Instructions</button>
+    </div> -->
+
+    <div class="control-bar">
+        <!-- <div>
+            <button id="resetAll" aria-label="Reset All">Reset All</button>
+        </div> -->
+        <div>
+            <button id="instructions" aria-label="Instructions">Instructions</button>
+        </div>
+        <div>
+            <label for="speed">Speed</label>
+            <input type="range" id="speed" min="0.25" max="4.0" step="0.1" value="1">
+          </div>
+        <div>
+            <button id="reset" aria-label="Reset Current">Reset Current</button>
+        </div>
+
+    <script>
+
+        const buttonGrid = [
+        ['soft-piano', 'harp', 'ascending-harp', 'descending-harp', 'strings'],
+        ['drip', 'ocean-wave', 'footstep-puddle', 'twig-snap', 'pan'],
+        ['drumset', 'bell', 'short-piano', 'staccato', 'pizzicato'],
+        ['rising-pitch', 'soft-bells', 'falling', 'pan-cue', 'low-beat']
+        ];
+        const sectionNames = [
+            'Fluid music', 
+            'Natural sounds', 
+            'Non-fluid music', 
+            'Synthetic sounds'
+        ];
+        let firstButtonPressed = -1;
+        let lastSpokenSectionIndex = -1;
+
+        let gRow = 0;
+        let gCol = 0;
+
+        const soundSettings = {};
+        const selectedButtons = new Set();
+        let activeSoundId = null;
+        let activeButton = null;
+        let prevAudioElement = null;
+
+        function handleClick(soundId) {
+            setRowCol(soundId);
+            playSound(soundId);
+        }
+
+        
+        async function playSound(soundId) {
+            if(prevAudioElement) {
+                prevAudioElement.pause();
+                prevAudioElement.currentTime = 0;
+            }
+
+            console.log("in play sound: " + soundId);
+            setActive(soundId);
+
+            const speed = soundSettings[activeSoundId].speed;
+            document.getElementById('speed').value = speed;
+
+            const audioElement = new Audio(`sounds/${activeSoundId}.wav`);
+            audioElement.playbackRate = speed;
+            try {
+                await audioElement.play();
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    console.error("Playback error:", err);
+                }
+            }
+
+            prevAudioElement = audioElement;
+        }
+
+        function setActive(soundId) {
+            if (activeButton && activeButton !== document.getElementById(soundId)) {
+                activeButton.classList.remove('active');
+            }
+            activeSoundId = soundId;
+
+            if (!(activeSoundId in soundSettings)) {
+                soundSettings[activeSoundId] = { speed: 1.0 };
+            }
+
+            document.getElementById('speed').value = soundSettings[activeSoundId].speed;
+
+            const newButton = document.getElementById(soundId);
+            newButton.classList.add('active');
+            activeButton = newButton;
+            saveSettingsToStorage();
+        }
+
+        function changeActiveLabel() {
+            firstButtonPressed = 0;
+            const ariaLabel = activeButton.getAttribute('aria-label');
+            document.getElementById('live-region').textContent = ariaLabel;
+            if (gRow !== lastSpokenSectionIndex) {
+                const section = sectionNames[gRow];
+                speak(`${section}. ${ariaLabel}`);
+                lastSpokenSectionIndex = gRow;
+            } else {
+                speak(ariaLabel);
+            }
+        }
+
+        function resetSpeed() {
+            if (activeSoundId && soundSettings[activeSoundId]) {
+                soundSettings[activeSoundId] = { speed: 1.0 };
+                document.getElementById('speed').value = 1.0;
+                saveSettingsToStorage();
+            }
+        }
+
+        function setRowCol(soundId) {
+            for (var i = 0; i < buttonGrid.length; i++) {
+                for (var j = 0; j < buttonGrid[i].length; j++) {
+                    if (buttonGrid[i][j] == soundId) {
+                        gRow = i; 
+                        gCol = j;
+                        lastSpokenSectionIndex = -1;
+                        return;
+                    }
+                }
+            }
+        }
+
+
+        function addTrashIcon(button) {
+            if (button.querySelector('.trash-icon')) return; // already added
+
+            const trash = document.createElement('span');
+            trash.classList.add('trash-icon');
+            trash.innerText = '🗑️';
+            trash.title = 'Remove selection';
+
+            trash.addEventListener('click', function (event) {
+                event.stopPropagation(); // prevents triggering button click
+                button.classList.remove('selected');
+                selectedButtons.delete(button);
+            });
+
+            button.appendChild(trash);
+            console.log("created trash")
+        }
+
+        let speakTimeout;
+        function speak(text, delay = 150) {
+            if (!window.speechSynthesis) return;
+            window.speechSynthesis.cancel();
+            clearTimeout(speakTimeout);
+
+            speakTimeout = setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 1.7;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                window.speechSynthesis.speak(utterance);
+            }, delay);
+        }
+
+        function playTick() {
+            const tick = new Audio('sounds/button.wav');
+            tick.volume = 0.05;
+            tick.play();
+        }
+
+        function saveSettingsToStorage() {
+            localStorage.setItem('soundSettings', JSON.stringify(soundSettings));
+            localStorage.setItem('selectedButtons', JSON.stringify([...selectedButtons].map(btn => btn.id)));
+            localStorage.setItem('activeSoundId', activeSoundId);
+        }
+
+        document.getElementById('speed').addEventListener('input', function () {
+            if (activeSoundId) {
+                soundSettings[activeSoundId].speed = parseFloat(this.value);
+                saveSettingsToStorage();
+            }
+        });
+
+        document.getElementById('reset').addEventListener('click', function () {
+            resetSpeed();
+        });
+
+        document.getElementById('instructions').addEventListener('click', function () {
+            event.preventDefault();
+            window.location.href = 'index.html';
+        });
+
+        window.addEventListener('keydown', function(event) {
+            console.log('Key pressed:', event.key);
+            const key = event.key;
+            const speedSlider = document.getElementById('speed');
+
+            if(firstButtonPressed == -1) {
+                changeActiveLabel();
+                firstButtonPressed = 0;
+                return;
+            } else if (key === 'ArrowUp') {
+                let newSpeed = Math.min(parseFloat(speedSlider.value) + 0.1, parseFloat(speedSlider.max));
+                speedSlider.value = newSpeed.toFixed(2);
+                soundSettings[activeSoundId].speed = newSpeed;
+                playTick();
+                saveSettingsToStorage();
+                event.preventDefault();
+                return;
+            } else if (key === 'ArrowDown') {
+                let newSpeed = Math.max(parseFloat(speedSlider.value) - 0.1, parseFloat(speedSlider.min));
+                speedSlider.value = newSpeed.toFixed(2);
+                soundSettings[activeSoundId].speed = newSpeed;
+                playTick();
+                saveSettingsToStorage();
+                event.preventDefault();
+                return;
+            } else if (key == 'ArrowLeft') {
+                resetSpeed();
+                speak("Reset speed");
+                return;
+            } else if (key === 'h') {
+                if(selectedButtons.has(activeButton)) {
+                    speak("Unsave sound");
+                    selectedButtons.delete(activeButton);
+                    activeButton.classList.remove('selected')
+                    saveSettingsToStorage();
+                } else {
+                    speak("Save sound");
+                    selectedButtons.add(activeButton);
+                    activeButton.classList.add('selected')
+                    addTrashIcon(activeButton);
+                    saveSettingsToStorage();
+                }
+                return;
+            } else if (key === 's') {
+                gRow = (gRow < buttonGrid.length-1)? (gRow + 1) : gRow;
+            } else if (key === 'w') {
+                gRow = (gRow > 0)? (gRow - 1) : gRow;
+            } else if (key === 'a') {
+                gCol = (gCol > 0)? (gCol - 1) : gCol;
+            } else if (key === 'd') {
+                gCol = (gCol < buttonGrid[gRow].length-1)? (gCol + 1) : gCol;
+            } else if(key == 'p') {
+                console.log(activeSoundId);
+                playSound(activeSoundId);
+                return;
+            } else if (key == ' ') {
+                event.preventDefault();
+                window.location.href = 'index.html';
+            } else {
+                return; 
+            }
+
+            const nextId = buttonGrid[gRow][gCol];
+            setActive(nextId);
+            changeActiveLabel();
+        });
+
+        window.onload = function () {
+            // Restore sound settings
+            const savedSettings = localStorage.getItem('soundSettings');
+            if (savedSettings) {
+                Object.assign(soundSettings, JSON.parse(savedSettings));
+            }
+
+            // Restore selected buttons
+            const selectedIds = JSON.parse(localStorage.getItem('selectedButtons') || '[]');
+            selectedIds.forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) {
+                    selectedButtons.add(btn);
+                    btn.classList.add('selected');
+                    addTrashIcon(btn);
+                }
+            });
+
+            // Restore active button
+            const savedActive = localStorage.getItem('activeSoundId');
+            if (savedActive && document.getElementById(savedActive)) {
+                activeSoundId = savedActive;
+                activeButton = document.getElementById(activeSoundId);
+                activeButton.classList.add('active');
+                setRowCol(activeSoundId);
+            } else {
+                // Default fallback
+                setActive('soft-piano');
+            }
+
+            firstButtonPressed = -1;
+        };
+
+    </script>
+
+    <div id="live-region" aria-live="polite" style="position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;">
+    </div>
+</body>
+</html>
