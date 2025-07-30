@@ -111,7 +111,7 @@
         <button id="harp" aria-label="Harp" onclick="handleClick('harp')">Harp</button>
         <button id="ascending-harp" aria-label="Ascending Harp" onclick="handleClick('ascending-harp')">Ascending Harp</button>
         <button id="descending-harp" aria-label="Descending Harp" onclick="handleClick('descending-harp')">Descending Harp</button>
-        <button id="strings" aria-label="Vibrato" onclick="handleClick('strings')">Vibrato</button>
+        <button id="strings" aria-label="Violin" onclick="handleClick('strings')">Violin</button>
         <!-- <button id="pluck" aria-label="Strum" onclick="handleClick('pluck')">Strum</button> -->
     </div>
 
@@ -138,8 +138,8 @@
         <button id="bell" aria-label="Bell" onclick="handleClick('bell')">Bell</button>
         <button id="short-piano" aria-label="Firm Piano" onclick="handleClick('short-piano')">Firm Piano</button>
         <!-- <button id="jazz-piano" aria-label="Jazz Piano" onclick="handleClick('jazz-piano')">Jazz Piano</button> -->
-        <button id="staccato" aria-label="Staccato" onclick="handleClick('staccato')">Staccato</button>
-        <button id="pizzicato" aria-label="Pizzicato" onclick="handleClick('pizzicato')">Pizzicato</button>
+        <button id="staccato" aria-label="Short Violin" onclick="handleClick('staccato')">Short Violin</button>
+        <button id="pizzicato" aria-label="Violin String" onclick="handleClick('pizzicato')">Violin String</button>
         <!-- <button id="guitar" aria-label="Firm Strum" onclick="handleClick('guitar')">Firm Strum</button> -->
     </div>
 
@@ -254,7 +254,8 @@
 
         function changeActiveLabel() {
             firstButtonPressed = 0;
-            const ariaLabel = activeButton.getAttribute('aria-label');
+            let ariaLabel = activeButton.getAttribute('aria-label');
+
             document.getElementById('live-region').textContent = ariaLabel;
             if (gRow !== lastSpokenSectionIndex) {
                 const section = sectionNames[gRow];

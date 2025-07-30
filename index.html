@@ -11,6 +11,13 @@
             font-size: 25px;
         }
 
+        button { 
+            position: relative;
+            padding: 15px; 
+            font-size: 15px; 
+            overflow: hidden;
+        }
+
         ul.instructions li {
           margin-bottom: 12px;
         }
@@ -31,6 +38,10 @@
       <li><strong>Trash icon</strong>: When a button is saved, a small 🗑️ icon appears. Clicking this will also unsave the sound.</li>
       <li><strong>Press the space bar</strong> to close these instructions. Press the space bar again or click the "Instructions" button to come back to this page at any point.</li>
     </ul>
+
+    <div>
+      <button id="close" aria-label="Close">Close</button>
+    </div>
 
     <script>
       let speakTimeout;
@@ -56,6 +67,10 @@
               window.speechSynthesis.speak(utterance);
           }, delay);
       }
+
+      document.getElementById('close').addEventListener('click', function () {
+        window.location.href = 'soundboard.html';
+      });
 
       window.addEventListener('keydown', function(event) {
         const key = event.key;
